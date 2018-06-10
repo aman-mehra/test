@@ -3,6 +3,7 @@ import urllib2
 from bs4 import BeautifulSoup
 from flask import Flask
 from flask import request
+import requests
 #app = Flask(__name__)
 
 @app.route('/getlinks')
@@ -23,9 +24,28 @@ def getvids():
     js=json.dumps(dix)
     return js
 
+def keyConcepts(text):
+    subscription_key = "0bfee4bdb89647c98ff905ae4270b71d"
+    assert subscription_key
 
-@approute('/getconcepts')
-def getconepts():
-    pass
+    text_analytics_base_url = "https://westcentralus.api.cognitive.microsoft.com/text/analytics/v2.0/"
+    key_phrase_api_url = text_analytics_base_url + "keyPhrases"
+    documents = {'documents' : [
+      {'id': '1', 'language': 'en', 'text':text}
+      ]
+    headers   = {"Ocp-Apim-Subscription-Key": subscription_key}
+    response  = requests.post(key_phrase_api_url , headers=headers, json=documents)
+    resp = response.json()
+    keywords = resp["documents"]
+    arr=keywords["keyPhrases"][:10]
+
+    ret_arr=[]
+    for i in arr:
+                 ret_arr.append({"concept":i})
+
+    js = json.dumps(ret_arr)
+    return key_phrase_api_url
+
+
 
 
