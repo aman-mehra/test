@@ -17,7 +17,7 @@ def getvids():
     arr=[]
     for vid in soup.findAll(attrs={'class':'yt-uix-tile-link'}):
         if (not vid['href'].startswith("https://www.googleadservices.com")) and (not vid['href'].startswith("channel/")):
-            arr.append( vid['href'].split("=")[-1]})
+            arr.append( vid['href'].split("=")[-1])
             if (len(arr)==4):
                 break
     dix= {"id1":arr[0],"id2":arr[1],"id3":arr[2],"id4":arr[3]}
